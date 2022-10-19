@@ -25,7 +25,7 @@ namespace Tennis
         {
             string score = "";
             var tempScore = 0;
-            if (_player1Score == _player2Score)
+            if (MatchingScores())
             {
                 return GetMatchingScore();
             }
@@ -54,6 +54,11 @@ namespace Tennis
                 return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
             }
             return score;
+        }
+
+        private bool MatchingScores()
+        {
+            return _player1Score == _player2Score;
         }
 
         private string GetMatchingScore()
