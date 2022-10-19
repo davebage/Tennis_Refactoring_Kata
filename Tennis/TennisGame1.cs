@@ -4,13 +4,9 @@ namespace Tennis
     {
         private int _player1Score = 0;
         private int _player2Score = 0;
-        private string player1Name;
-        private string player2Name;
 
         public TennisGame1(string player1Name, string player2Name)
         {
-            this.player1Name = player1Name;
-            this.player2Name = player2Name;
         }
 
         public void WonPoint(string playerName)
