@@ -4,6 +4,7 @@ namespace Tennis
     {
         private int _player1Score = 0;
         private int _player2Score = 0;
+        private readonly string[] _score = new string[] { "Love", "Fifteen", "Thirty", "Forty" };
 
         public TennisGame1(string player1Name, string player2Name)
         {
@@ -50,28 +51,14 @@ namespace Tennis
             }
             else
             {
-                for (var i = 1; i < 3; i++)
-                {
-                    if (i == 1) tempScore = _player1Score;
-                    else { score += "-"; tempScore = _player2Score; }
-                    switch (tempScore)
-                    {
-                        case 0:
-                            score += "Love";
-                            break;
-                        case 1:
-                            score += "Fifteen";
-                            break;
-                        case 2:
-                            score += "Thirty";
-                            break;
-                        case 3:
-                            score += "Forty";
-                            break;
-                    }
-                }
+                return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
             }
             return score;
+        }
+
+        private string GetScore(int tempScore)
+        {
+            return _score[tempScore];
         }
     }
 }
