@@ -15,7 +15,7 @@ internal class ScorePrinter
             return FormatMatchingScores(player1);
         }
 
-        if (player1._score >= 4 || player2._score >= 4)
+        if (player1.GetScore() >= 4 || player2.GetScore() >= 4)
         {
             return FormatAdvantageOrWinningScores(player1, player2);
         }
@@ -26,34 +26,32 @@ internal class ScorePrinter
 
     private static string GetScore(Player player)
     {
-        return _score[player._score];
+        return _score[player.GetScore()];
+    }
+
+    private static Player WinningPlayer(Player player1, Player player2)
+    {
+        if(player1.CompareTo(player2) > 0)
+            return player1;
+
+        return player2;
     }
 
     private static string FormatAdvantageOrWinningScores(Player player1, Player player2)
     {
-        var playerScoreDifference = player1._score - player2._score;
-        if (playerScoreDifference == 1)
+        var playerScoreDifference = player1.GetScore() - player2.GetScore();
+        if (playerScoreDifference == 1 || playerScoreDifference == -1)
         {
-            return "Advantage player1";
+            return $"Advantage {WinningPlayer(player1, player2).GetName()}";
         }
 
-        if (playerScoreDifference == -1)
-        {
-            return "Advantage player2";
-        }
-
-        if (playerScoreDifference >= 2)
-        {
-            return "Win for player1";
-        }
-
-        return "Win for player2";
+        return $"Win for {WinningPlayer(player1, player2).GetName()}";
     }
 
     private static string FormatMatchingScores(Player player)
     {
-        if (_matchingScores.ContainsKey(player._score))
-            return _matchingScores[player._score];
+        if (_matchingScores.ContainsKey(player.GetScore()))
+            return _matchingScores[player.GetScore()];
 
         return "Deuce";
     }

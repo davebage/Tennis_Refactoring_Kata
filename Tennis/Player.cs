@@ -1,9 +1,11 @@
+using System;
+
 namespace Tennis;
 
-public class Player
+public class Player : IComparable<Player>
 {
     private readonly string _name;
-    internal int _score;
+    private int _score;
 
     public Player(string name)
     {
@@ -27,5 +29,24 @@ public class Player
     public void IncrementScore()
     {
         _score++;
+    }
+
+    public int CompareTo(Player other)
+    {
+        if(this._score == other._score) return 0;
+
+        if(this._score < other._score) return -1;
+
+        return 1;
+    }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
+    public int GetScore()
+    {
+        return _score;
     }
 }
