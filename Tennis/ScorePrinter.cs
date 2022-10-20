@@ -15,18 +15,28 @@ internal class ScorePrinter
             return FormatMatchingScores(player1);
         }
 
-        if (player1.GetScore() >= 4 || player2.GetScore() >= 4)
+        if (IsAdvantageScore(player1, player2))
         {
-            return FormatAdvantageOrWinningScores(player1, player2);
+            return FormatAdvantageScores(player1, player2);
+        }
+
+        if (IsGameWon(player1, player2))
+        {
+            return FormatWinningScore(player1, player2);
         }
 
         return $"{GetScore(player1)}-{GetScore(player2)}";
 
     }
 
+    private static bool IsAdvantageOrWinScore(Player player1, Player player2)
+    {
+        return player1.GetScore() >= 4 || player2.GetScore() >= 4;
+    }
+
     private static string GetScore(Player player)
     {
-        return _score[player.GetScore()];
+        return ScoreLookupsFor.RegularScore[player.GetScore()];
     }
 
     private static Player WinningPlayer(Player player1, Player player2)
@@ -37,21 +47,36 @@ internal class ScorePrinter
         return player2;
     }
 
-    private static string FormatAdvantageOrWinningScores(Player player1, Player player2)
+    private bool IsAdvantageScore(Player player1, Player player2)
     {
-        var playerScoreDifference = player1.GetScore() - player2.GetScore();
-        if (playerScoreDifference == 1 || playerScoreDifference == -1)
-        {
-            return $"Advantage {WinningPlayer(player1, player2).GetName()}";
-        }
+        return ((player1.GetScore() >= 4 || player2.GetScore() >= 4) &&
+                (player1.GetScore() - player2.GetScore() == 1 || 
+                 player1.GetScore() - player2.GetScore() == -1));
+    }
 
-        return $"Win for {WinningPlayer(player1, player2).GetName()}";
+    private bool IsGameWon(Player player1, Player player2)
+    {
+        return ((player1.GetScore() >= 4 || player2.GetScore() >= 4) &&
+                (player1.GetScore() - player2.GetScore() >= 2 ||
+                 player1.GetScore() - player2.GetScore() <= -2));
+    }
+
+    private static string FormatAdvantageScores(Player player1, Player player2)
+    {
+        
+        return $"{ScoreLookupsFor.ADVANTAGE} {WinningPlayer(player1, player2).GetName()}";
+    }
+
+    private static string FormatWinningScore(Player player1, Player player2)
+    {
+        return $"{ScoreLookupsFor.WIN} {WinningPlayer(player1, player2).GetName()}";
     }
 
     private static string FormatMatchingScores(Player player)
     {
-        if (_matchingScores.ContainsKey(player.GetScore()))
-            return _matchingScores[player.GetScore()];
+        
+        if (ScoreLookupsFor.Matching.ContainsKey(player.GetScore()))
+            return ScoreLookupsFor.Matching[player.GetScore()];
 
         return "Deuce";
     }
