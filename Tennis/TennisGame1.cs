@@ -28,7 +28,7 @@ namespace Tennis
                 return GetMatchingScore();
             }
 
-            if (_player1Score >= ADVANTAGE_SCORE || _player2Score >= ADVANTAGE_SCORE)
+            if (IsAdvantageOrWin())
             {
                 var playerScoreDifference = _player1Score - _player2Score;
                 if (playerScoreDifference == ADVANTAGE_PLAYER_1)
@@ -50,6 +50,11 @@ namespace Tennis
             }
 
             return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
+        }
+
+        private bool IsAdvantageOrWin()
+        {
+            return _player1Score >= ADVANTAGE_SCORE || _player2Score >= ADVANTAGE_SCORE;
         }
 
         private bool MatchingScores()
