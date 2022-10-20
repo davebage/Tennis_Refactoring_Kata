@@ -8,6 +8,10 @@ namespace Tennis
         private int _player2Score = 0;
         private readonly string[] _score = new string[] { "Love", "Fifteen", "Thirty", "Forty" };
         private readonly Dictionary<int, string> _matchingScores = new Dictionary<int, string>() { {0, "Love-All"}, {1, "Fifteen-All"}, {2, "Thirty-All"} };
+        private const int ADVANTAGE_SCORE = 4;
+        private const int ADVANTAGE_PLAYER_1 = 1;
+        private const int ADVANTAGE_PLAYER_2 = -1;
+        private const int WIN_PLAYER_1 = 2;
 
         public TennisGame1(string player1Name, string player2Name)
         {
@@ -27,31 +31,34 @@ namespace Tennis
             {
                 return GetMatchingScore();
             }
-            
-            if (_player1Score >= 4 || _player2Score >= 4)
+
+            if (_player1Score >= ADVANTAGE_SCORE || _player2Score >= ADVANTAGE_SCORE)
             {
-                var minusResult = _player1Score - _player2Score;
-                if (minusResult == 1)
+                var playerScoreDifference = _player1Score - _player2Score;
+                if (playerScoreDifference == ADVANTAGE_PLAYER_1)
                 {
                     return "Advantage player1";
                 }
-                else if (minusResult == -1)
+
+                if (playerScoreDifference == ADVANTAGE_PLAYER_2)
                 {
                     return "Advantage player2";
                 }
-                else if (minusResult >= 2)
+
+                if (playerScoreDifference >= WIN_PLAYER_1)
                 {
                     return "Win for player1";
                 }
-                else
-                {
-                    return "Win for player2";
-                }
+
+                return "Win for player2";
             }
-            else
-            {
-                return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
-            }
+
+            return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
+        }
+
+        private bool IsAdvantageScore()
+        {
+            return _player1Score >= ADVANTAGE_SCORE || _player2Score >= ADVANTAGE_SCORE;
         }
 
         private bool MatchingScores()
