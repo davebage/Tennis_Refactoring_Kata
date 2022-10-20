@@ -4,28 +4,32 @@ namespace Tennis;
 
 internal class ScorePrinter
 {
-    private static readonly Dictionary<int, string> _matchingScores = new() { { 0, "Love-All" }, { 1, "Fifteen-All" }, { 2, "Thirty-All" } };
-    private static readonly string[] _score = new string[] { "Love", "Fifteen", "Thirty", "Forty" };
+    private readonly TennisPlayers _players;
 
-    public string PrintScore(Player player1, Player player2)
+    public ScorePrinter(TennisPlayers players)
     {
+        _players = players;
+    }
 
-        if (player1.AreMatchingScores(player2))
+    public string PrintScore()
+    {
+        if (_players.PlayerInLead() == null)
         {
-            return FormatMatchingScores(player1);
+            return FormatMatchingScores(_players.PlayerOne());
+        }
+        
+        if (_players.IsAdvantageScore())
+        {
+            return FormatAdvantageScores(_players.PlayerInLead());
         }
 
-        if (IsAdvantageScore(player1, player2))
+        if (_players.GameWinner() != null)
         {
-            return FormatAdvantageScores(player1, player2);
+            
+            return FormatWinningScore(_players.GameWinner());
         }
 
-        if (IsGameWon(player1, player2))
-        {
-            return FormatWinningScore(player1, player2);
-        }
-
-        return FormatInPlayScore(player1, player2);
+        return FormatInPlayScore(_players.PlayerOne(), _players.PlayerTwo());
 
     }
 
@@ -34,47 +38,20 @@ internal class ScorePrinter
         return $"{GetScore(player1)}-{GetScore(player2)}";
     }
 
-    private static bool IsAdvantageOrWinScore(Player player1, Player player2)
-    {
-        return player1.GetScore() >= 4 || player2.GetScore() >= 4;
-    }
-
     private static string GetScore(Player player)
     {
         return ScoreLookupsFor.RegularScore[player.GetScore()];
     }
 
-    private static Player WinningPlayer(Player player1, Player player2)
-    {
-        if(player1.CompareTo(player2) > 0)
-            return player1;
-
-        return player2;
-    }
-
-    private bool IsAdvantageScore(Player player1, Player player2)
-    {
-        return ((player1.GetScore() >= 4 || player2.GetScore() >= 4) &&
-                (player1.GetScore() - player2.GetScore() == 1 || 
-                 player1.GetScore() - player2.GetScore() == -1));
-    }
-
-    private bool IsGameWon(Player player1, Player player2)
-    {
-        return ((player1.GetScore() >= 4 || player2.GetScore() >= 4) &&
-                (player1.GetScore() - player2.GetScore() >= 2 ||
-                 player1.GetScore() - player2.GetScore() <= -2));
-    }
-
-    private static string FormatAdvantageScores(Player player1, Player player2)
+    private static string FormatAdvantageScores(Player winningPlayer)
     {
         
-        return $"{ScoreLookupsFor.ADVANTAGE} {WinningPlayer(player1, player2).GetName()}";
+        return $"{ScoreLookupsFor.ADVANTAGE} {winningPlayer.GetName()}";
     }
 
-    private static string FormatWinningScore(Player player1, Player player2)
+    private static string FormatWinningScore(Player winningPlayer)
     {
-        return $"{ScoreLookupsFor.WIN} {WinningPlayer(player1, player2).GetName()}";
+        return $"{ScoreLookupsFor.WIN} {winningPlayer.GetName()}";
     }
 
     private static string FormatMatchingScores(Player player)
