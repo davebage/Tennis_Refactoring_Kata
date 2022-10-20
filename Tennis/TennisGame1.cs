@@ -23,37 +23,35 @@ namespace Tennis
 
         public string GetScore()
         {
-            string score = "";
-            var tempScore = 0;
             if (MatchingScores())
             {
                 return GetMatchingScore();
             }
-            else if (_player1Score >= 4 || _player2Score >= 4)
+            
+            if (_player1Score >= 4 || _player2Score >= 4)
             {
                 var minusResult = _player1Score - _player2Score;
                 if (minusResult == 1)
                 {
-                    score = "Advantage player1";
+                    return "Advantage player1";
                 }
                 else if (minusResult == -1)
                 {
-                    score = "Advantage player2";
+                    return "Advantage player2";
                 }
                 else if (minusResult >= 2)
                 {
-                    score = "Win for player1";
+                    return "Win for player1";
                 }
                 else
                 {
-                    score = "Win for player2";
+                    return "Win for player2";
                 }
             }
             else
             {
                 return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
             }
-            return score;
         }
 
         private bool MatchingScores()
