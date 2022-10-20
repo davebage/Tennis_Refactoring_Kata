@@ -25,8 +25,13 @@ internal class ScorePrinter
             return FormatWinningScore(player1, player2);
         }
 
-        return $"{GetScore(player1)}-{GetScore(player2)}";
+        return FormatInPlayScore(player1, player2);
 
+    }
+
+    private static string FormatInPlayScore(Player player1, Player player2)
+    {
+        return $"{GetScore(player1)}-{GetScore(player2)}";
     }
 
     private static bool IsAdvantageOrWinScore(Player player1, Player player2)
