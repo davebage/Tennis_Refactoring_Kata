@@ -7,7 +7,7 @@ namespace Tennis.Tests
 {
     public class TestDataGenerator : IEnumerable<object[]>
     {
-        private readonly List<object[]> _data = new List<object[]>
+        private readonly List<object[]> _data = new()
         {
             new object[] {0, 0, "Love-All"},
             new object[] {1, 1, "Fifteen-All"},
@@ -55,7 +55,7 @@ namespace Tennis.Tests
         [ClassData(typeof(TestDataGenerator))]
         public void Tennis1Test(int p1, int p2, string expected)
         {
-            var game = new TennisGame1("player1", "player2");
+            var game = new TennisGame1();
             CheckAllScores(game, p1, p2, expected);
         }
 

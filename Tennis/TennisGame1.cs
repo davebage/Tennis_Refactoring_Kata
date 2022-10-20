@@ -7,15 +7,11 @@ namespace Tennis
         private int _player1Score = 0;
         private int _player2Score = 0;
         private readonly string[] _score = new string[] { "Love", "Fifteen", "Thirty", "Forty" };
-        private readonly Dictionary<int, string> _matchingScores = new Dictionary<int, string>() { {0, "Love-All"}, {1, "Fifteen-All"}, {2, "Thirty-All"} };
+        private readonly Dictionary<int, string> _matchingScores = new() { {0, "Love-All"}, {1, "Fifteen-All"}, {2, "Thirty-All"} };
         private const int ADVANTAGE_SCORE = 4;
         private const int ADVANTAGE_PLAYER_1 = 1;
         private const int ADVANTAGE_PLAYER_2 = -1;
         private const int WIN_PLAYER_1 = 2;
-
-        public TennisGame1(string player1Name, string player2Name)
-        {
-        }
 
         public void WonPoint(string playerName)
         {
@@ -54,11 +50,6 @@ namespace Tennis
             }
 
             return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
-        }
-
-        private bool IsAdvantageScore()
-        {
-            return _player1Score >= ADVANTAGE_SCORE || _player2Score >= ADVANTAGE_SCORE;
         }
 
         private bool MatchingScores()
