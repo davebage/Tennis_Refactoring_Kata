@@ -1,11 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tennis
 {
     public class TennisGame1 : ITennisGame
     {
-        private int _player1Score = 0;
-        private int _player2Score = 0;
+        private Dictionary<string, int> _scores = new Dictionary<string, int>();
         private readonly string[] _score = new string[] { "Love", "Fifteen", "Thirty", "Forty" };
         private readonly Dictionary<int, string> _matchingScores = new() { {0, "Love-All"}, {1, "Fifteen-All"}, {2, "Thirty-All"} };
         private const int ADVANTAGE_SCORE = 4;
@@ -13,59 +13,67 @@ namespace Tennis
         private const int ADVANTAGE_PLAYER_2 = -1;
         private const int WIN_PLAYER_1 = 2;
 
+        public TennisGame1(string player1Name, string player2Name)
+        {
+            _scores.Add(player1Name, 0);
+            _scores.Add(player2Name, 0);
+        }
+
         public void WonPoint(string playerName)
         {
-            if (playerName == "player1")
-                _player1Score += 1;
-            else
-                _player2Score += 1;
+            _scores[playerName]++;
         }
 
         public string GetScore()
         {
             if (MatchingScores())
             {
-                return GetMatchingScore();
+                return FormatMatchingScores();
             }
 
             if (IsAdvantageOrWin())
             {
-                var playerScoreDifference = _player1Score - _player2Score;
-                if (playerScoreDifference == ADVANTAGE_PLAYER_1)
-                {
-                    return "Advantage player1";
-                }
-
-                if (playerScoreDifference == ADVANTAGE_PLAYER_2)
-                {
-                    return "Advantage player2";
-                }
-
-                if (playerScoreDifference >= WIN_PLAYER_1)
-                {
-                    return "Win for player1";
-                }
-
-                return "Win for player2";
+                return FormatAdvantageOrWinningScores();
             }
 
-            return $"{GetScore(_player1Score)}-{GetScore(_player2Score)}";
+            return $"{GetScore(_scores.First().Value)}-{GetScore(_scores.Last().Value)}";
+        }
+
+        private string FormatAdvantageOrWinningScores()
+        {
+            var playerScoreDifference = _scores.First().Value -_scores.Last().Value;
+            if (playerScoreDifference == ADVANTAGE_PLAYER_1)
+            {
+                return "Advantage player1";
+            }
+
+            if (playerScoreDifference == ADVANTAGE_PLAYER_2)
+            {
+                return "Advantage player2";
+            }
+
+            if (playerScoreDifference >= WIN_PLAYER_1)
+            {
+                return "Win for player1";
+            }
+
+            return "Win for player2";
         }
 
         private bool IsAdvantageOrWin()
         {
-            return _player1Score >= ADVANTAGE_SCORE || _player2Score >= ADVANTAGE_SCORE;
+            return _scores.First().Value >= ADVANTAGE_SCORE || _scores.Last().Value >= ADVANTAGE_SCORE;
         }
 
         private bool MatchingScores()
         {
-            return _player1Score == _player2Score;
+            return _scores.First().Value == _scores.Last().Value;
         }
 
-        private string GetMatchingScore()
+        private string FormatMatchingScores()
         {
-            if(_matchingScores.ContainsKey(_player1Score))
-                return _matchingScores[_player1Score];
+            if(_matchingScores.ContainsKey(_scores.First().Value))
+                return _matchingScores[_scores.First().Value];
 
             return "Deuce";
         }
