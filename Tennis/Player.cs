@@ -20,12 +20,6 @@ public class Player : IComparable<Player>
 
     }
 
-    public bool AreMatchingScores(Player other)
-    {
-        if(other == null) return false;
-        return _score == other._score;
-    }
-
     public void IncrementScore()
     {
         _score++;
