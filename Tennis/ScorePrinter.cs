@@ -13,7 +13,7 @@ internal class ScorePrinter
 
     public string PrintScore()
     {
-        if (_players.PlayerInLead() == null)
+        if (_players.MatchingScores())
         {
             return FormatMatchingScores(_players.PlayerOne());
         }

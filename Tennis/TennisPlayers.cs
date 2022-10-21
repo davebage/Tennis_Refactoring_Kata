@@ -43,6 +43,11 @@ public class TennisPlayers
         return false;
     }
 
+    public bool MatchingScores()
+    {
+        return _players[PLAYER1].CompareTo(_players[PLAYER2]) == 0;
+    }
+
     public Player PlayerInLead()
     {
         var comparator = _players[PLAYER1].CompareTo(_players[PLAYER2]);
